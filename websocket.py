@@ -425,11 +425,11 @@ async def handle_client(websocket):
     ╚══════════════════════════════════════════════════════════╝
 
     EXEMPLES D'UTILISATION:
-    • analyser martin
+    • analyser jean_martin
     • preuves physique
     • motif heritage  
-    • niveau eleve
-    • complices martin sophie''',
+    • niveau haute
+    • complices jean_martin sophie_laurent''',
                             'error': None
                         }
                     }
