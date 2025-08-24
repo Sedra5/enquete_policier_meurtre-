@@ -107,14 +107,6 @@ Identifie les points faibles de l'enquête (alibis solides, manque de preuves).
 
 L'interface web moderne offre une expérience utilisateur intuitive pour interagir avec le système d'enquête :
 
-### Fonctionnalités de l'Interface Web
-- **Dashboard interactif** avec visualisation des scores de suspicion
-- **Navigation fluide** entre les différents suspects et preuves
-- **Graphiques dynamiques** pour l'analyse des données
-- **Rapports exportables** en format PDF
-- **Communication temps réel** avec le moteur Prolog via WebSocket
-- **Interface responsive** adaptée à tous les appareils
-
 ### Communication WebSocket
 L'interface Next.js communique avec le système Prolog via WebSocket, permettant :
 - Exécution de requêtes Prolog en temps réel
