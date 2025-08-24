@@ -1,12 +1,11 @@
 % Analyse des liens entre suspects
 lien_complice_potentiel(Personne1, Personne2) :-
     relation(Personne1, Personne2, Type),
-    member(Type, [epoux, ami, collegue, employe]),
+    member(Type, [epoux, ami, collegue, employe, secretaire]),
     niveau_suspicion(Personne1, Niveau1),
     niveau_suspicion(Personne2, Niveau2),
     member(Niveau1, [eleve, tres_eleve]),
-    member(Niveau2, [modere, eleve]).
-
+    member(Niveau2, [faible, modere, eleve]). 
 % Coherence des preuves
 preuves_coherentes(Personne) :-
     preuve_physique(_, Personne, _, _),

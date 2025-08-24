@@ -18,6 +18,7 @@ Un système expert développé en Prolog pour simuler et analyser des enquêtes 
 enquete-meurtre/
 ├── README.md
 ├── main.pl                 # Point d'entrée principal avec aide
+├── websocket.py            # Interface WebSocket pour intégration web
 ├── data/
 │   ├── personnes.pl        # Personnes, relations, motifs, accès
 │   ├── preuves.pl          # Preuves physiques, témoignages, alibis
@@ -37,12 +38,21 @@ enquete-meurtre/
 - SWI-Prolog installé sur votre système
 
 ### Lancement
+
+#### Mode Console (Prolog direct)
 ```bash
 $ swipl
 ?- [main].
 ```
 
 Le système s'initialise automatiquement et affiche l'aide disponible.
+
+#### Mode WebSocket (Interface Web)
+```bash
+$ python websocket.py
+```
+
+L'interface WebSocket permet d'intégrer le système Prolog dans des applications web modernes.
 
 ### Commandes Principales
 
@@ -86,6 +96,55 @@ Vérifie la cohérence des preuves contre le suspect principal.
 ?- faiblesses_enquete.
 ```
 Identifie les points faibles de l'enquête (alibis solides, manque de preuves).
+
+## 🌐 Interface WebSocket
+
+### Fonctionnalités de l'Interface WebSocket
+
+- **Exécution sécurisée** des requêtes Prolog via subprocess
+- **Gestion des timeouts** (10 secondes par défaut)
+- **Capture des erreurs** détaillée avec messages explicites
+- **Format de réponse standardisé** JSON pour intégration facile
+- **Vérification de l'installation** SWI-Prolog automatique
+
+### Structure de la Réponse WebSocket
+
+```json
+{
+    "success": boolean,
+    "result": string | null,
+    "error": string | null
+}
+```
+
+### Utilisation de l'Interface WebSocket
+
+La fonction `query_prolog(query)` permet d'exécuter n'importe quelle requête Prolog :
+
+```python
+# Exemple d'utilisation
+result = query_prolog("suspect_principal(X)")
+if result['success']:
+    print(f"Résultat: {result['result']}")
+else:
+    print(f"Erreur: {result['error']}")
+```
+
+### Gestion des Erreurs WebSocket
+
+Le système WebSocket gère automatiquement :
+- **Timeout des requêtes** (> 10 secondes)
+- **Erreurs Prolog** (syntaxe, prédicats non définis)
+- **Absence de SWI-Prolog** dans le PATH système
+- **Erreurs d'exécution** générales avec messages détaillés
+
+### Intégration dans Applications Web
+
+L'interface WebSocket facilite l'intégration du système d'enquête dans :
+- Applications web interactives
+- Dashboards d'investigation
+- APIs REST pour systèmes tiers
+- Interfaces mobiles via frameworks hybrides
 
 ## 📊 Système de Scoring
 
