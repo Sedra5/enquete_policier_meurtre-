@@ -11,6 +11,7 @@ Un système expert développé en Prolog pour simuler et analyser des enquêtes 
 - **Analyse des témoignages** et comportements suspects
 - **Génération de rapports** d'enquête complets
 - **Recommandations d'action** pour les enquêteurs
+- **Interface web moderne** développée en Next.js avec communication WebSocket
 
 ## 📁 Architecture Modulaire
 
@@ -18,7 +19,6 @@ Un système expert développé en Prolog pour simuler et analyser des enquêtes 
 enquete-meurtre/
 ├── README.md
 ├── main.pl                 # Point d'entrée principal avec aide
-├── websocket.py            # Interface WebSocket pour intégration web
 ├── data/
 │   ├── personnes.pl        # Personnes, relations, motifs, accès
 │   ├── preuves.pl          # Preuves physiques, témoignages, alibis
@@ -27,32 +27,38 @@ enquete-meurtre/
 │   ├── scoring.pl          # Calcul des scores de suspicion
 │   ├── classification.pl   # Classification et suspect principal
 │   └── analysis.pl         # Analyse avancée et cohérence
-└── rapports/
-    ├── generation.pl       # Génération des rapports principaux
-    └── queries.pl          # Requêtes spécialisées pour enquêteurs
+├── rapports/
+│   ├── generation.pl       # Génération des rapports principaux
+│   └── queries.pl          # Requêtes spécialisées pour enquêteurs
+└── frontend/               # Interface web Next.js
+
 ```
 
 ## 🚀 Installation et Utilisation
 
 ### Prérequis
 - SWI-Prolog installé sur votre système
+- Node.js (version 16 ou supérieure) pour l'interface web
+- npm ou yarn
 
-### Lancement
-
-#### Mode Console (Prolog direct)
+### Lancement du Système Prolog
 ```bash
 $ swipl
 ?- [main].
 ```
 
-Le système s'initialise automatiquement et affiche l'aide disponible.
-
-#### Mode WebSocket (Interface Web)
+### Lancement de l'Interface Web
 ```bash
-$ python websocket.py
+# Depuis le dossier frontend/
+$ npm install
+$ npm run dev
 ```
 
-L'interface WebSocket permet d'intégrer le système Prolog dans des applications web modernes.
+L'interface web sera accessible à l'adresse `http://localhost:3000` et communique avec le système Prolog via WebSocket.
+
+### Interface en Ligne de Commande
+
+Le système s'initialise automatiquement et affiche l'aide disponible.
 
 ### Commandes Principales
 
@@ -97,54 +103,25 @@ Vérifie la cohérence des preuves contre le suspect principal.
 ```
 Identifie les points faibles de l'enquête (alibis solides, manque de preuves).
 
-## 🌐 Interface WebSocket
+## 🌐 Interface Web Next.js
 
-### Fonctionnalités de l'Interface WebSocket
+L'interface web moderne offre une expérience utilisateur intuitive pour interagir avec le système d'enquête :
 
-- **Exécution sécurisée** des requêtes Prolog via subprocess
-- **Gestion des timeouts** (10 secondes par défaut)
-- **Capture des erreurs** détaillée avec messages explicites
-- **Format de réponse standardisé** JSON pour intégration facile
-- **Vérification de l'installation** SWI-Prolog automatique
+### Fonctionnalités de l'Interface Web
+- **Dashboard interactif** avec visualisation des scores de suspicion
+- **Navigation fluide** entre les différents suspects et preuves
+- **Graphiques dynamiques** pour l'analyse des données
+- **Rapports exportables** en format PDF
+- **Communication temps réel** avec le moteur Prolog via WebSocket
+- **Interface responsive** adaptée à tous les appareils
 
-### Structure de la Réponse WebSocket
+### Communication WebSocket
+L'interface Next.js communique avec le système Prolog via WebSocket, permettant :
+- Exécution de requêtes Prolog en temps réel
+- Mise à jour automatique des données
+- Notification des changements d'état
+- Gestion des erreurs et timeouts
 
-```json
-{
-    "success": boolean,
-    "result": string | null,
-    "error": string | null
-}
-```
-
-### Utilisation de l'Interface WebSocket
-
-La fonction `query_prolog(query)` permet d'exécuter n'importe quelle requête Prolog :
-
-```python
-# Exemple d'utilisation
-result = query_prolog("suspect_principal(X)")
-if result['success']:
-    print(f"Résultat: {result['result']}")
-else:
-    print(f"Erreur: {result['error']}")
-```
-
-### Gestion des Erreurs WebSocket
-
-Le système WebSocket gère automatiquement :
-- **Timeout des requêtes** (> 10 secondes)
-- **Erreurs Prolog** (syntaxe, prédicats non définis)
-- **Absence de SWI-Prolog** dans le PATH système
-- **Erreurs d'exécution** générales avec messages détaillés
-
-### Intégration dans Applications Web
-
-L'interface WebSocket facilite l'intégration du système d'enquête dans :
-- Applications web interactives
-- Dashboards d'investigation
-- APIs REST pour systèmes tiers
-- Interfaces mobiles via frameworks hybrides
 
 ## 📊 Système de Scoring
 
@@ -245,6 +222,9 @@ Les règles de calcul peuvent être ajustées dans `regles/scoring.pl` selon les
 ### Ajouter de Nouvelles Analyses
 Créez de nouvelles règles dans `regles/analysis.pl` pour des analyses personnalisées.
 
+### Personnaliser l'Interface Web
+L'interface Next.js peut être étendue en ajoutant de nouveaux composants dans le dossier `frontend/components/` et en créant de nouvelles pages selon les besoins.
+
 ## 📝 Exemples de Requêtes Utiles
 
 ```prolog
@@ -269,6 +249,24 @@ Créez de nouvelles règles dans `regles/analysis.pl` pour des analyses personna
 
 ## 🚀 Démarrage Rapide
 
+### Via Interface Web (Recommandé)
+1. **Démarrer le backend Prolog** :
+   ```bash
+   $ swipl
+   ?- [main].
+   ```
+
+2. **Lancer l'interface web** :
+   ```bash
+   $ cd frontend
+   $ npm install
+   $ npm run dev
+   ```
+
+3. **Accéder à l'application** :
+   Ouvrir `http://localhost:3000` dans votre navigateur
+
+### Via Ligne de Commande
 1. **Charger le système** :
    ```prolog
    ?- [main].
@@ -292,7 +290,7 @@ Créez de nouvelles règles dans `regles/analysis.pl` pour des analyses personna
 ## 📋 Résultats Attendus
 
 Avec les données incluses, le système devrait identifier **Jean Martin** comme suspect principal avec un score élevé basé sur :
-- Motif d'héritage important (500k€)
+- Motif d'héritage important (500k)
 - Alibi non vérifié
 - Preuves ADN de haute fiabilité
 - Témoignage de dispute
@@ -325,10 +323,12 @@ Pour contribuer au projet :
 3. Respectez l'architecture modulaire existante
 4. Ajoutez des tests dans les modules appropriés
 5. Documentez les nouvelles règles et prédicats
-6. Soumettez une pull request
+6. Pour l'interface web, suivez les conventions React/Next.js
+7. Soumettez une pull request
 
 ### Conventions de Code
-- Utilisez des noms explicites pour les prédicats
-- Commentez les règles complexes
+- **Backend Prolog** : Utilisez des noms explicites pour les prédicats, commentez les règles complexes
+- **Frontend Next.js** : Suivez les conventions React, utilisez TypeScript si possible
 - Respectez la séparation des responsabilités par module
-- Testez avec `?- help.` après modifications
+- Testez avec `?- help.` après modifications du backend
+- Testez l'interface web sur différents navigateurs
