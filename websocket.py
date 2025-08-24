@@ -80,7 +80,7 @@ async def handle_client(websocket):
                     data = {'type': 'faiblesses_enquete'}
                 elif message_lower == 'ping':
                     data = {'type': 'ping'}
-                # Nouvelles commandes ajoutées
+            
                 elif message_lower == 'victime':
                     data = {'type': 'victime'}
                 elif message_lower == 'relations':
@@ -99,7 +99,7 @@ async def handle_client(websocket):
                     data = {'type': 'types_preuves'}
                 elif message_lower == 'fiabilite':
                     data = {'type': 'niveaux_fiabilite'}
-                # Commandes avec paramètres
+                
                 elif message_lower.startswith('analyser '):
                     nom = message_lower.replace('analyser ', '').strip()
                     if nom:
@@ -131,7 +131,7 @@ async def handle_client(websocket):
                     else:
                         data = {'type': 'unknown'}
                 else:
-                    # Essayer de parser comme JSON
+                   
                     try:
                         data = json.loads(message)
                     except json.JSONDecodeError:
@@ -422,7 +422,6 @@ async def handle_client(websocket):
     ║                                                          ║
     ║ RAPPORT COMPLET:                                         ║
     ║ 19. rapport                   - Rapport complet          ║
-    ║ 20. ping                      - Test de connexion        ║
     ╚══════════════════════════════════════════════════════════╝
 
     EXEMPLES D'UTILISATION:
@@ -489,14 +488,14 @@ async def main():
     
     logger.info(f"Démarrage du serveur WebSocket sur {host}:{port}")
     
-    # Test rapide de Prolog
+   
     test_result = query_prolog('write("Test Prolog OK"), nl')
     if not test_result['success']:
         logger.warning(f"Test Prolog échoué: {test_result['error']}")
     else:
         logger.info("Test Prolog réussi")
     
-    # Démarre le serveur
+    
     server = await websockets.serve(
         handle_client,
         host,
@@ -504,32 +503,7 @@ async def main():
         ping_interval=20,
         ping_timeout=10
     )
-    
-    logger.info(f"Serveur WebSocket en écoute sur ws://{host}:{port}")
-    logger.info("Messages supportés:")
-    logger.info("  - {'type': 'rapport'} : Rapport complet d'enquête")
-    logger.info("  - {'type': 'tous_suspects'} : Liste tous les suspects")
-    logger.info("  - {'type': 'analyser_suspect', 'nom': 'NomSuspect'} : Analyse un suspect")
-    logger.info("  - {'type': 'suspect_principal'} : Trouve le suspect principal")
-    logger.info("  - {'type': 'coherence_enquete'} : Vérification de cohérence")
-    logger.info("  - {'type': 'faiblesses_enquete'} : Analyse des faiblesses")
-    logger.info("  - {'type': 'preuves_type', 'type': 'TypePreuve'} : Preuves par type")
-    logger.info("  - {'type': 'lien_complice_potentiel', 'x': 'Nom1', 'y': 'Nom2'} : Complices potentiels")
-    logger.info("  - {'type': 'victime'} : Informations sur la victime")
-    logger.info("  - {'type': 'toutes_relations'} : Toutes les relations")
-    logger.info("  - {'type': 'tous_temoignages'} : Tous les témoignages")
-    logger.info("  - {'type': 'tous_comportements'} : Tous les comportements")
-    logger.info("  - {'type': 'suspects_sans_alibi'} : Suspects sans alibi")
-    logger.info("  - {'type': 'types_motifs'} : Types de motifs")
-    logger.info("  - {'type': 'suspects_par_motif', 'motif': 'TypeMotif'} : Suspects par motif")
-    logger.info("  - {'type': 'toutes_preuves'} : Toutes les preuves")
-    logger.info("  - {'type': 'types_preuves'} : Types de preuves")
-    logger.info("  - {'type': 'niveaux_fiabilite'} : Niveaux de fiabilité")
-    logger.info("  - {'type': 'preuves_par_fiabilite', 'niveau': 'Niveau'} : Preuves par fiabilité")
-    logger.info("  - {'type': 'help'} : Liste des commandes")
-    logger.info("  - {'type': 'ping'} : Test de connexion")
-    
-    
+
     await server.wait_closed()
 
 if __name__ == '__main__':
